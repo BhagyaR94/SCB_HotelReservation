@@ -3,13 +3,14 @@ package org.booking.service.impl;
 import org.booking.dto.BookingDTO;
 import org.booking.dto.BookingKey;
 import org.booking.exception.BookingException;
-import org.booking.exception.RoomReservationException;
 import org.booking.service.BookingService;
 import org.booking.service.RoomService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public void makeReservation(String guestName, int roomNumber, LocalDate bookingDate) throws BookingException {
-        LocalDateTime formattedBookingDate = getFormattedBookingDate(bookingDate);
+        LocalDate formattedBookingDate = getFormattedBookingDate(bookingDate);
         BookingKey bookingKey = getBookingKey(roomNumber, formattedBookingDate);
         BookingDTO bookingValue = getBookingDTO(guestName, roomNumber, formattedBookingDate);
 
@@ -43,25 +44,30 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<BookingDTO> findBookingByDate(LocalDate bookingDate) {
+        Predicate<BookingDTO> filterByBookingDate = bookingDTO -> bookingDTO.getBookingDate().equals(bookingDate);
+        return bookings.values().stream().filter(filterByBookingDate).collect(Collectors.toList());
+    }
+
+    @Override
     public List<BookingDTO> getAllBookings() {
         return new ArrayList<>(bookings.values());
     }
 
-    private LocalDateTime getFormattedBookingDate(LocalDate bookingDate) {
-        LocalDateTime formattedBookingDate = bookingDate.atStartOfDay();
+    private LocalDate getFormattedBookingDate(LocalDate bookingDate) {
 
         if (bookingDate.isBefore(LocalDate.now())) {
             throw new BookingException("Booking Date Cannot Be In The Past");
         }
 
-        return formattedBookingDate;
+        return bookingDate;
     }
 
-    private BookingDTO getBookingDTO(String guestName, int roomNumber, LocalDateTime bookingDate) {
+    private BookingDTO getBookingDTO(String guestName, int roomNumber, LocalDate bookingDate) {
         return new BookingDTO(guestName, roomNumber, bookingDate);
     }
 
-    private BookingKey getBookingKey(int roomNumber, LocalDateTime bookingDate) {
+    private BookingKey getBookingKey(int roomNumber, LocalDate bookingDate) {
         return new BookingKey(roomNumber, bookingDate);
     }
 }

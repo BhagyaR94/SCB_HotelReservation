@@ -69,11 +69,11 @@ public class BookingServiceImplTest {
         bookingService.makeReservation(guest5Name, room5Number, bookingDate);
 
         String guest6Name = "Roy";
-        int room6Number = 405;
+        int room6Number = 104;
         bookingService.makeReservation(guest6Name, room6Number, bookingDate);
 
         String guest7Name = "Sam";
-        int room7Number = 501;
+        int room7Number = 205;
         bookingService.makeReservation(guest7Name, room7Number, bookingDate);
 
         Assert.assertEquals(3, bookingService.findBookingByGuestName("Jo").size());
@@ -81,6 +81,28 @@ public class BookingServiceImplTest {
         Assert.assertEquals(1, bookingService.findBookingByGuestName("Roy").size());
         Assert.assertEquals(1, bookingService.findBookingByGuestName("Sam").size());
         Assert.assertEquals(0, bookingService.findBookingByGuestName("Chris").size());
+    }
+
+    @Test
+    public void findBookingByDate_ShouldReturnTheBookingsForTheGivenDate(){
+        LocalDate bookingDate = LocalDate.now().plusDays(5);
+        LocalDate secondBookingDate = LocalDate.now().plusDays(7);
+
+        String guestName = "John";
+        int roomNumber = 101;
+        bookingService.makeReservation(guestName, roomNumber, bookingDate);
+
+        String guest2Name = "Johanssen";
+        int room2Number = 105;
+        bookingService.makeReservation(guest2Name, room2Number, bookingDate);
+
+        String guest3Name = "Joe";
+        int room3Number = 102;
+        bookingService.makeReservation(guest3Name, room3Number, secondBookingDate);
+
+        Assert.assertEquals(2, bookingService.findBookingByDate(bookingDate).size());
+        Assert.assertEquals(1, bookingService.findBookingByDate(secondBookingDate).size());
+
     }
 
     @Test(expected = BookingException.class)

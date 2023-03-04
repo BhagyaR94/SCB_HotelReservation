@@ -1,15 +1,14 @@
 package org.booking.dto;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BookingDTO {
     private String guestName;
     private int roomNumber;
 
-    private LocalDateTime bookingDate;
+    private LocalDate bookingDate;
 
-    public BookingDTO(String guestName, int roomNumber, LocalDateTime bookingDate) {
+    public BookingDTO(String guestName, int roomNumber, LocalDate bookingDate) {
         this.guestName = guestName;
         this.roomNumber = roomNumber;
         this.bookingDate = bookingDate;
@@ -31,11 +30,11 @@ public class BookingDTO {
         this.roomNumber = roomNumber;
     }
 
-    public LocalDateTime getBookingDate() {
+    public LocalDate getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(LocalDateTime bookingDate) {
+    public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
     }
 }
